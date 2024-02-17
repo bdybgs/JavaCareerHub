@@ -1,0 +1,23 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="JavaUniversityEmployment:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/JavaUniversityEmployment_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="JavaUniversityEmployment/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="JavaUniversityEmployment" />
+          <element id="library" level="project" name="apache-tomcat-10.1" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="mysql.connector.java" />
+          <element id="file-copy" path="$PROJECT_DIR$/.idea/libraries/mysql-connector-java-8.0.23.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../tomcat/apache-tomcat-10.1.18/webapps/examples/WEB-INF/lib/taglibs-standard-impl-1.2.5-migrated-0.0.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../tomcat/apache-tomcat-10.1.18/webapps/examples/WEB-INF/lib/taglibs-standard-spec-1.2.5-migrated-0.0.1.jar" />
+        </element>
+      </element>
+      <element id="directory" name="src">
+        <element id="dir-copy" path="$PROJECT_DIR$/src" />
+      </element>
+    </root>
+  </artifact>
+</component>
