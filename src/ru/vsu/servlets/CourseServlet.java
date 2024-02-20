@@ -26,17 +26,23 @@ public class CourseServlet extends HttpServlet {
             // Отобразить форму добавления
             request.getRequestDispatcher("/WEB-INF/views/courses/addcourse.jsp").forward(request, response);
         } else if ("updateName".equals(action)) {
-            // Отобразить форму обновления имени курса
+            // Отобразить форму обновления названия курса
             int courseId = Integer.parseInt(request.getParameter("id"));
             Course course = coursesService.getByID(courseId);
             request.setAttribute("course", course);
-            request.getRequestDispatcher("/WEB-INF/views/courses/updatename.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/courses/updatecoursename.jsp").forward(request, response);
         } else if ("updateHours".equals(action)) {
-            // Отобразить форму обновления количества часов курса
+            // Отобразить форму обновления часов курса
             int courseId = Integer.parseInt(request.getParameter("id"));
             Course course = coursesService.getByID(courseId);
             request.setAttribute("course", course);
-            request.getRequestDispatcher("/WEB-INF/views/courses/updatehours.jsp").forward(request, response);
+            request.getRequestDispatcher("/WEB-INF/views/courses/updatecoursehours.jsp").forward(request, response);
+        } else if ("edit".equals(action)) {
+            // Отобразить форму редактирования курса
+            int courseId = Integer.parseInt(request.getParameter("id"));
+            Course course = coursesService.getByID(courseId);
+            request.setAttribute("course", course);
+            request.getRequestDispatcher("/WEB-INF/views/courses/editcourse.jsp").forward(request, response);
         } else {
             // Вывести все курсы
             List<Course> courses = coursesService.getAll();
@@ -56,7 +62,7 @@ public class CourseServlet extends HttpServlet {
             int hours = Integer.parseInt(request.getParameter("hours"));
             coursesService.add(new Course(name, hours));
         } else if ("updateName".equals(action)) {
-            // Обновить имя курса
+            // Обновить название курса
             int courseId = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
             coursesService.updateName(courseId, name);
@@ -65,6 +71,17 @@ public class CourseServlet extends HttpServlet {
             int courseId = Integer.parseInt(request.getParameter("id"));
             int hours = Integer.parseInt(request.getParameter("hours"));
             coursesService.updateHours(courseId, hours);
+        } else if ("edit".equals(action)) {
+            // Перенаправить на форму редактирования курса
+            response.sendRedirect(request.getContextPath() + "/course?action=edit&id=" + request.getParameter("id"));
+            return;
+        } else if ("update".equals(action)) {
+            // Обновить курс (используем updateName и updateHours)
+            int courseId = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            int hours = Integer.parseInt(request.getParameter("hours"));
+            coursesService.updateName(courseId, name);
+            coursesService.updateHours(courseId, hours);
         } else if ("delete".equals(action)) {
             // Выполнить удаление курса
             int courseId = Integer.parseInt(request.getParameter("id"));
@@ -72,8 +89,6 @@ public class CourseServlet extends HttpServlet {
         }
 
         // Перенаправить на вывод всех курсов
-        response.sendRedirect(request.getContextPath() + "/course");
+        response.sendRedirect(request.getContextPath() + "/course?action=all");
     }
-
-
 }

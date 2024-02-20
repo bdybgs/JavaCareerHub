@@ -12,7 +12,8 @@
     <c:forEach var="course" items="${courses}">
         <li>
                 ${course.getID()} ${course.getName()} - ${course.getHours()} hours
-            <form style="display:inline" action="${pageContext.request.contextPath}/course?action=edit" method="get">
+            <form style="display:inline" action="${pageContext.request.contextPath}/course" method="post">
+                <input type="hidden" name="action" value="edit">
                 <input type="hidden" name="id" value="${course.getID()}">
                 <button type="submit">Edit</button>
             </form>

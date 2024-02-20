@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.vsu.entities.Lecturer;
+import ru.vsu.service.CoursesService;
+import ru.vsu.service.CoursesServicesMemory;
 import ru.vsu.service.LecturersService;
 import ru.vsu.service.LecturersServicesMemory;
 
@@ -16,6 +18,8 @@ import java.util.List;
 public class LecturerServlet extends HttpServlet {
 
     private final LecturersService lecturersService = LecturersServicesMemory.getINSTANCE();
+    private final CoursesService coursesService = CoursesServicesMemory.getINSTANCE();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -37,6 +41,12 @@ public class LecturerServlet extends HttpServlet {
             Lecturer lecturer = lecturersService.getByID(lecturerId);
             request.setAttribute("lecturer", lecturer);
             request.getRequestDispatcher("/WEB-INF/views/lecturers/updatelecturersurname.jsp").forward(request, response);
+        } else if ("edit".equals(action)) {
+            // Отобразить форму редактирования преподавателя
+            int lecturerId = Integer.parseInt(request.getParameter("id"));
+            Lecturer lecturer = lecturersService.getByID(lecturerId);
+            request.setAttribute("lecturer", lecturer);
+            request.getRequestDispatcher("/WEB-INF/views/lecturers/editlecturer.jsp").forward(request, response);
         } else {
             // Вывести всех преподавателей
             List<Lecturer> lecturers = lecturersService.getAll();
@@ -47,7 +57,7 @@ public class LecturerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
         String action = request.getParameter("action");
 
         if ("add".equals(action)) {
@@ -65,9 +75,25 @@ public class LecturerServlet extends HttpServlet {
             int lecturerId = Integer.parseInt(request.getParameter("id"));
             String surname = request.getParameter("surname");
             lecturersService.updateSurname(lecturerId, surname);
+        } else if ("edit".equals(action)) {
+            // Перенаправить на форму редактирования преподавателя
+            response.sendRedirect(request.getContextPath() + "/lecturer?action=edit&id=" + request.getParameter("id"));
+            return;
+        } else if ("update".equals(action)) {
+            // Обновить преподавателя (используем updateName и updateSurname)
+            int lecturerId = Integer.parseInt(request.getParameter("id"));
+            String name = request.getParameter("name");
+            String surname = request.getParameter("surname");
+            lecturersService.updateName(lecturerId, name);
+            lecturersService.updateSurname(lecturerId, surname);
+        } else if ("delete".equals(action)) {
+            // Выполнить удаление преподавателя
+            int lecturerId = Integer.parseInt(request.getParameter("id"));
+            lecturersService.delete(lecturerId);
         }
 
         // Перенаправить на вывод всех преподавателей
-        response.sendRedirect(request.getContextPath() + "/lecturer?action=add");
+        response.sendRedirect(request.getContextPath() + "/lecturer?action=all");
     }
 }
+
